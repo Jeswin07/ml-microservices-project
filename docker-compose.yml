@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ml-service
+
+  ml-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.ml-service
+    ports:
+      - "8002:8002"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+
+  history-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.history-service
+    ports:
+      - "8003:8003"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"

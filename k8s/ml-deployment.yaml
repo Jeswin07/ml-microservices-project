@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: ml-deployment
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: ml
+
+  template:
+    metadata:
+      labels:
+        app: ml
+
+    spec:
+      containers:
+      - name: ml-container
+        image: jeswin07/ml-service:v1
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 8002
+
+        env:
+        - name: DB_HOST
+          value: "db"
